@@ -52,17 +52,20 @@ tasks.named<Test>("test") {
 graalvmNative {
     binaries {
         named("main") {
-            buildArgs.add("-H:+UnlockExperimentalVMOptions") // Required for IncludeResources
-            buildArgs.add("-H:IncludeResources=Icons/.*")
+            imageName.set("Project1App") // The name of your final executable
+            mainClass.set("MainSystem.Main") // Points to your Main.java
             
-            // On Windows, use this specific flag to remove the console window 
-            // instead of the generic '--gui' which is causing the error.
-            buildArgs.add("-H:WindowsExportFunctions=main") 
-            buildArgs.add("-H:LinkerFlags=/SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")
-            
-            // Alternatively, if you just want to remove the --gui error, 
-            // ensure it is only written ONCE and check if your version supports it.
-            // But the LinkerFlags approach above is the standard way for Windows GUIs.
+            buildArgs.addAll(
+                "-H:+UnlockExperimentalVMOptions", // Required for resource bundling
+                "-H:IncludeResources=Icons/.*",    // Bundles your Icons folder
+                "--no-fallback",                   // Standalone binary
+                "-H:+AddAllCharsets",              // Support for DB drivers
+                // Correct way to hide the console window on Windows GUIs
+                "-H:LinkerFlags=/SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup" 
+            )
+
+            // REMOVE the manual javaLauncher.set block entirely.
+            // It will now use the global toolchain defined earlier.
         }
     }
     metadataRepository {
