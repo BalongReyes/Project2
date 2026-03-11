@@ -60,16 +60,28 @@ graalvmNative {
             imageName.set("Project2App")
             mainClass.set("MainSystem.Main")
 
-            buildArgs.add("--initialize-at-run-time=javax.swing.SystemEventQueueUtilities")
+            // 1. Critical for Desktop apps: Allow AWT and Java Desktop components
+            jvmArgs.add("-Djava.awt.headless=false")
+            
+            // 2. Prevent GraalVM from "cleaning up" GUI methods during build
+            buildArgs.add("--initialize-at-run-time=java.awt.Toolkit")
+            buildArgs.add("--initialize-at-run-time=java.awt.Component")
             buildArgs.add("--initialize-at-run-time=javax.swing.UIManager")
-            buildArgs.add("--initialize-at-run-time=java.awt.color.ColorSpace")
-
-            buildArgs.add("-H:+AddAllCharsets") 
+            buildArgs.add("--initialize-at-run-time=javax.swing.Box")
+            
+            // 3. Include all character sets and locales for GUI rendering
+            buildArgs.add("-H:+AddAllCharsets")
             buildArgs.add("-H:+IncludeAllLocales")
             
+            // 4. Ensure metadata for reflection is included (Swing uses this heavily)
             buildArgs.add("-H:+UnlockExperimentalVMOptions")
-            buildArgs.add("--no-fallback")
-            buildArgs.add("-H:IncludeResources=Icons/.*")
+            buildArgs.add("-H:+AddAllCharsets")
+
+            if (org.gradle.internal.os.OperatingSystem.current().isWindows) {
+                // Keep these commented out until the app opens successfully
+                // buildArgs.add("-H:NativeLinkerOption=/SUBSYSTEM:WINDOWS")
+                // buildArgs.add("-H:NativeLinkerOption=/ENTRY:mainCRTStartup")
+            }
         }
     }
     metadataRepository {
