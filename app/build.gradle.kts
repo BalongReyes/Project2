@@ -58,7 +58,7 @@ graalvmNative {
             })
 
             // Your existing configuration...
-            imageName.set("Project1App")
+            imageName.set("Project2App")
             mainClass.set("MainSystem.Main")
             buildArgs.add("-H:+UnlockExperimentalVMOptions")
             buildArgs.add("--no-fallback")
