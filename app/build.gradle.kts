@@ -35,7 +35,7 @@ dependencies {
 // Apply a specific Java toolchain to ease working on different environments.
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
+        languageVersion.set(JavaLanguageVersion.of(21))
     }
 }
 
@@ -52,20 +52,25 @@ tasks.named<Test>("test") {
 graalvmNative {
     binaries {
         named("main") {
-            imageName.set("Project1App") // The name of your final executable
-            mainClass.set("MainSystem.Main") // Points to your Main.java
-            
-            buildArgs.addAll(
-                "-H:+UnlockExperimentalVMOptions", // Required for resource bundling
-                "-H:IncludeResources=Icons/.*",    // Bundles your Icons folder
-                "--no-fallback",                   // Standalone binary
-                "-H:+AddAllCharsets",              // Support for DB drivers
-                // Correct way to hide the console window on Windows GUIs
-                "-H:LinkerFlags=/SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup" 
-            )
+            javaLauncher.set(javaToolchains.launcherFor {
+                languageVersion.set(JavaLanguageVersion.of(21))
+                vendor.set(JvmVendorSpec.GRAAL_VM) // Force it to pick the GraalVM installation
+            })
 
-            // REMOVE the manual javaLauncher.set block entirely.
-            // It will now use the global toolchain defined earlier.
+            // Your existing configuration...
+            imageName.set("Project1App")
+            mainClass.set("MainSystem.Main")
+            buildArgs.add("-H:+UnlockExperimentalVMOptions")
+            buildArgs.add("--no-fallback")
+            buildArgs.add("-H:IncludeResources=Icons/.*")
+            
+            if (org.gradle.internal.os.OperatingSystem.current().isWindows) {
+                jvmArgs.add("-Djava.awt.headless=false")
+                buildArgs.add("-H:+Win64NativeStackWalker")
+                // This ensures the .exe doesn't open a console window
+                buildArgs.add("-H:NativeLinkerOption=/SUBSYSTEM:WINDOWS")
+                buildArgs.add("-H:NativeLinkerOption=/ENTRY:mainCRTStartup")
+            }
         }
     }
     metadataRepository {
