@@ -8,5 +8,6 @@
   "java.errors.incompleteClasspath.severity": "warning",
   "[java]": {
     "editor.formatOnSave": true
-  }
+  },
+  "java.compile.nullAnalysis.mode": "automatic"
 }

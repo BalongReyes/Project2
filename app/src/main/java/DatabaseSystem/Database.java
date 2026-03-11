@@ -15,7 +15,7 @@ public class Database {
 
     protected static String databaseName = "avidadatabase";
     protected static String username = "root";
-    protected static String password = "";
+    protected static String password = "AvidaDatabase101";
     protected static String ip = "localhost";
     protected static String port = "3306";
 

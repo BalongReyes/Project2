@@ -4,7 +4,7 @@ package DatabaseSystem.AccountsData;
 import ConsoleSystem.Console;
 import ConsoleSystem.ConsoleColors;
 import DatabaseSystem.Database;
-import FrameSystem.LoginGroup.Managers.ManagerLogin;
+import FrameSystem.LayerFolder_Main.Layers.LayerFolder_Login.Managers.ManagerModuleLogin;
 import MainSystem.Main;
 import MethodsSystem.MethodAlgorithms;
 import java.math.BigInteger;
@@ -24,8 +24,8 @@ public class AccountsDataHandler{
         Database.execute("SELECT * FROM accounts", (result) -> {
             while(result.next()){
                 AccountsDataTable data = new AccountsDataTable(result);
-                if(ManagerLogin.isLoggedIn() && ManagerLogin.getAccountLoggedIn().idEquals(data.getId())){
-                    ManagerLogin.updateAccountLoggedIn(data);
+                if(ManagerModuleLogin.isLoggedIn() && ManagerModuleLogin.getAccountLoggedIn().idEquals(data.getId())){
+                    ManagerModuleLogin.updateAccountLoggedIn(data);
                 }
                 if(!data.isError()) array.add(data);
             }

@@ -1,6 +1,6 @@
 package MainSystem;
 
-import FrameSystem.LoginGroup.Managers.ManagerLogin;
+import FrameSystem.LayerFolder_Main.Layers.LayerFolder_Login.Managers.ManagerModuleLogin;
 
 public class Manager {
 
@@ -8,8 +8,8 @@ public class Manager {
 
     public static void setDefault(SFrame frame) {
         Manager.frame = frame;
-
-        ManagerLogin.initDefault();
+        
+        ManagerModuleLogin.initDefault(frame.moduleLogin);
     }
 
 }
