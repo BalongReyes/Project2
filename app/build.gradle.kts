@@ -59,17 +59,17 @@ graalvmNative {
 
             imageName.set("Project2App")
             mainClass.set("MainSystem.Main")
+
+            buildArgs.add("--initialize-at-run-time=javax.swing.SystemEventQueueUtilities")
+            buildArgs.add("--initialize-at-run-time=javax.swing.UIManager")
+            buildArgs.add("--initialize-at-run-time=java.awt.color.ColorSpace")
+
+            buildArgs.add("-H:+AddAllCharsets") 
+            buildArgs.add("-H:+IncludeAllLocales")
             
             buildArgs.add("-H:+UnlockExperimentalVMOptions")
             buildArgs.add("--no-fallback")
             buildArgs.add("-H:IncludeResources=Icons/.*")
-
-            if (org.gradle.internal.os.OperatingSystem.current().isWindows) {
-                jvmArgs.add("-Djava.awt.headless=false")
-                // REMOVED: buildArgs.add("-H:+Win64NativeStackWalker")
-                // buildArgs.add("-H:NativeLinkerOption=/SUBSYSTEM:WINDOWS")
-                // buildArgs.add("-H:NativeLinkerOption=/ENTRY:mainCRTStartup")
-            }
         }
     }
     metadataRepository {
