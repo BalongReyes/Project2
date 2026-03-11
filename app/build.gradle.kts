@@ -54,22 +54,21 @@ graalvmNative {
         named("main") {
             javaLauncher.set(javaToolchains.launcherFor {
                 languageVersion.set(JavaLanguageVersion.of(21))
-                vendor.set(JvmVendorSpec.GRAAL_VM) // Force it to pick the GraalVM installation
+                vendor.set(JvmVendorSpec.GRAAL_VM)
             })
 
-            // Your existing configuration...
             imageName.set("Project2App")
             mainClass.set("MainSystem.Main")
+            
             buildArgs.add("-H:+UnlockExperimentalVMOptions")
             buildArgs.add("--no-fallback")
             buildArgs.add("-H:IncludeResources=Icons/.*")
-            
+
             if (org.gradle.internal.os.OperatingSystem.current().isWindows) {
                 jvmArgs.add("-Djava.awt.headless=false")
-                buildArgs.add("-H:+Win64NativeStackWalker")
-                // This ensures the .exe doesn't open a console window
-                buildArgs.add("-H:NativeLinkerOption=/SUBSYSTEM:WINDOWS")
-                buildArgs.add("-H:NativeLinkerOption=/ENTRY:mainCRTStartup")
+                // REMOVED: buildArgs.add("-H:+Win64NativeStackWalker")
+                // buildArgs.add("-H:NativeLinkerOption=/SUBSYSTEM:WINDOWS")
+                // buildArgs.add("-H:NativeLinkerOption=/ENTRY:mainCRTStartup")
             }
         }
     }
