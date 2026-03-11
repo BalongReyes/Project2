@@ -9,8 +9,9 @@ plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     application
     id("org.graalvm.buildtools.native") version "0.10.1"
-}
 
+    id("java")
+}
 
 repositories {
     // Use Maven Central for resolving dependencies.
@@ -51,28 +52,17 @@ tasks.named<Test>("test") {
 graalvmNative {
     binaries {
         named("main") {
-            imageName.set("Project1App") // The name of your final executable
-            mainClass.set("MainSystem.Main") // Points to your Main.java
+            buildArgs.add("-H:+UnlockExperimentalVMOptions") // Required for IncludeResources
+            buildArgs.add("-H:IncludeResources=Icons/.*")
             
-            buildArgs.addAll(
-                "--gui",                      // Required for Windows/macOS GUI apps
-                "--no-fallback",              // Ensures a standalone binary is created
-                "-H:+AddAllCharsets",         // Often needed for database drivers
-                "--initialize-at-build-time=ConsoleSystem.ConsoleColors" // Optional optimization
-            )
-
-            buildArgs.addAll(
-                "--gui",
-                "--no-fallback",
-                "-H:+AddAllCharsets",
-                // Add this line to include the Icons directory in the native binary
-                "-H:IncludeResources=Icons/.*" 
-            )
-
-            javaLauncher.set(javaToolchains.launcherFor {
-                languageVersion.set(JavaLanguageVersion.of(21)) // Match your project version
-                vendor.set(JvmVendorSpec.GRAAL_VM)
-            })
+            // On Windows, use this specific flag to remove the console window 
+            // instead of the generic '--gui' which is causing the error.
+            buildArgs.add("-H:WindowsExportFunctions=main") 
+            buildArgs.add("-H:LinkerFlags=/SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")
+            
+            // Alternatively, if you just want to remove the --gui error, 
+            // ensure it is only written ONCE and check if your version supports it.
+            // But the LinkerFlags approach above is the standard way for Windows GUIs.
         }
     }
     metadataRepository {
