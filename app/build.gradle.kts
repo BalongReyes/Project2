@@ -8,7 +8,7 @@
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     application
-    id("org.graalvm.buildtools.native") version "0.10.1"
+    id("org.graalvm.buildtools.native") version "0.10.3"
 
     id("java")
 }
@@ -30,6 +30,8 @@ dependencies {
     // MySQL Connector JAR dependency
     implementation("com.mysql:mysql-connector-j:8.4.0")
 
+    // FlatLaf for modern Swing look and feel
+    implementation("com.formdev:flatlaf:3.4.1")
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
@@ -57,17 +59,17 @@ graalvmNative {
                 vendor.set(JvmVendorSpec.GRAAL_VM)
             })
 
-            imageName.set("Project2App")
-            mainClass.set("MainSystem.Main")
-
-            // 1. Critical for Desktop apps: Allow AWT and Java Desktop components
-            jvmArgs.add("-Djava.awt.headless=false")
-            
             // 2. Prevent GraalVM from "cleaning up" GUI methods during build
             buildArgs.add("--initialize-at-run-time=java.awt.Toolkit")
             buildArgs.add("--initialize-at-run-time=java.awt.Component")
             buildArgs.add("--initialize-at-run-time=javax.swing.UIManager")
             buildArgs.add("--initialize-at-run-time=javax.swing.Box")
+
+            imageName.set("Project2App")
+            mainClass.set("MainSystem.Main")
+
+            // 1. Critical for Desktop apps: Allow AWT and Java Desktop components
+            jvmArgs.add("-Djava.awt.headless=false")
             
             // 3. Include all character sets and locales for GUI rendering
             buildArgs.add("-H:+AddAllCharsets")

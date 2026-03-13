@@ -70,7 +70,7 @@ goto fail
 :execute
 @rem Setup the command line
 
-set CLASSPATH=%APP_HOME%\lib\app.jar;%APP_HOME%\lib\guava-33.4.6-jre.jar;%APP_HOME%\lib\mysql-connector-j-8.4.0.jar;%APP_HOME%\lib\failureaccess-1.0.3.jar;%APP_HOME%\lib\listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar;%APP_HOME%\lib\jspecify-1.0.0.jar;%APP_HOME%\lib\error_prone_annotations-2.36.0.jar;%APP_HOME%\lib\j2objc-annotations-3.0.0.jar;%APP_HOME%\lib\protobuf-java-3.25.1.jar
+set CLASSPATH=%APP_HOME%\lib\app.jar;%APP_HOME%\lib\guava-33.4.6-jre.jar;%APP_HOME%\lib\mysql-connector-j-8.4.0.jar;%APP_HOME%\lib\flatlaf-3.4.1.jar;%APP_HOME%\lib\failureaccess-1.0.3.jar;%APP_HOME%\lib\listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar;%APP_HOME%\lib\jspecify-1.0.0.jar;%APP_HOME%\lib\error_prone_annotations-2.36.0.jar;%APP_HOME%\lib\j2objc-annotations-3.0.0.jar;%APP_HOME%\lib\protobuf-java-3.25.1.jar
 
 
 @rem Execute app

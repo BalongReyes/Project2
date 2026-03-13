@@ -1,6 +1,8 @@
 package MainSystem;
 
-import DatabaseSystem.Database;
+import com.formdev.flatlaf.FlatLightLaf;
+
+import DatabaseSystem.Database; // Import FlatLaf
 
 public class Main {
 
@@ -11,6 +13,12 @@ public class Main {
 
     public static void main(String[] args) {
         Database.openConnection();
+
+        try {
+            FlatLightLaf.setup();
+        } catch (Exception ex) {
+            System.err.println("Failed to initialize FlatLaf");
+        }
 
         frame = new SFrame();
         frame.setVisible(true);
